@@ -1,9 +1,6 @@
 "use strict"
 var express = require('express')
 
-function parseCsvToProgram(csv) {
-
-}
 class Application {
     constructor() {
         let app = express()
