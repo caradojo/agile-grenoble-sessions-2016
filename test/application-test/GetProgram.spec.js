@@ -1,27 +1,29 @@
 "use strict"
 var expect = require('chai').expect
 var request = require('supertest-as-promised')
-var express = require('express')
+
+var Application = require('../../src/Application')
+
+
 describe('given it has loaded the csv', function() {
-    class Application {
+    class TestApplication {
 
         constructor() {
-            this.app = express()
-            this.app.get('/summary', function (req, res, next) {
-                res.send({rooms: []})
-            })
+            var application = new Application()
+            this.application = application
+            application.buildRoutes()
         }
 
-        loadCsv() {
+        updateWith(csv) {
+            this.application.updateWith(csv)
 
         }
 
-        expressApp() {
-            return this.app
-        }
         getSummary() {
 
-            return request(this.app).get('/summary')
+            let server = this.application.getRoutes()
+
+            return request(server).get('/summary')
 
         }
 
@@ -30,13 +32,15 @@ describe('given it has loaded the csv', function() {
     describe('serves the roomlist', function() {
 
         it('where every room has a name and a sequential id', function() {
-            let application = new Application()
-            application.loadCsv()
+            let application = new TestApplication()
+            let csv = "Titre,room;titre-session,Auditorium"
+            application.updateWith(csv)
             return application.getSummary()
                 .set('Accept', 'application/json')
                 .expect(200)
                 .expect(function (res) {
                     expect(res.body.rooms).not.to.be.undefined
+                    expect(res.body.rooms).to.deep.equal({Auditorium: {capacity: 530, id:0}})
                 })
 
 
