@@ -38,12 +38,20 @@ describe('given it has loaded the csv', function() {
             return application.getSummary()
                 .set('Accept', 'application/json')
                 .expect(200)
-                .expect(function (res) {
-                    expect(res.body.rooms).not.to.be.undefined
-                    expect(res.body.rooms).to.deep.equal({Auditorium: {capacity: 530, id:0}})
-                })
+                .expect(bodyToHaveRoomsAndSlots)
 
 
+            function bodyToHaveRoomsAndSlots(res) {
+                var body = res.body
+                expect(body.rooms).not.to.be.undefined
+                expect(body.rooms).to.deep.equal({Auditorium: {capacity: 530, id:0}})
+                expect(body.slots[0]).to.deep.equal({all: {
+                    "width": 12,
+                    "length": 1,
+                    "title": "Accueil des participants autour d'un café",
+                    "type": "non-session"
+                }})
+            }
 
         })
 

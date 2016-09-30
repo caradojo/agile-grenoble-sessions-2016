@@ -14,7 +14,10 @@ class Application {
     buildRoutes() {
         let self = this
         this.app.get('/summary', function (req, res, next) {
-            res.send({rooms: self.program.getRooms()})
+            res.send({
+                rooms: self.program.getRooms(),
+                slots: self.program.getSlots()
+            })
         })
         return this.app
     }
@@ -32,16 +35,33 @@ class Application {
 
 class Program {
     constructor(csv) {
-        // TODO to some tranformation based on the csv
-        this.data = {
+        // TODO here
+        this.data = this.todoCompileObjectFromCsv(csv)
+    }
+
+    todoCompileObjectFromCsv(csv) {
+        return {
             rooms: {
                 Auditorium: {capacity: 530, id: 0}
-            }
+            },
+            slots: [{
+                all: {
+                    "width": 12,
+                    "length": 1,
+                    "title": "Accueil des participants autour d'un café",
+                    "type": "non-session"
+                }
+            }],
+            sessions: [] // TODO array of all sessions where we can just get a session based on its index
         }
     }
 
     getRooms() {
         return this.data.rooms
+    }
+
+    getSlots() {
+        return this.data.slots
     }
 }
 

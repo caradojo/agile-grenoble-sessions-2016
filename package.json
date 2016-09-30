@@ -2,8 +2,9 @@
   "name": "agile-grenoble-sessions-2016",
   "version": "0.0.1",
   "description": "backend for the program of agile grenoble 2016",
-  "main": "index.js",
+  "main": "boot.js",
   "scripts": {
+    "start": "node boot.js",
     "test": "mocha"
   },
   "author": "",
