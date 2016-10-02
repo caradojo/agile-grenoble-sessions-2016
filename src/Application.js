@@ -11,7 +11,7 @@ class Application {
     buildRoutes() {
         let self = this
         this.app.get('/summary', function (req, res) {
-            res.send({
+            res.jsonp({
                 rooms: self.program.getRooms(),
                 slots: self.program.getSlots()
             })
