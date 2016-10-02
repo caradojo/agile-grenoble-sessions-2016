@@ -56,9 +56,29 @@ describe('given it has loaded the csv', function() {
         })
 
     })
+    
     describe('with sessins', function() {
         it('', function() {
 
         })
     })
+    
+    // describe('debugging', function() {
+    //     it('has some raw csv', function() {
+    //         var application = new Application()
+    //         application.updateWith("titre,sujet")
+    //         let server = application.buildRoutes()
+    //
+    //         function bodytoContainCsv(res) {
+    //             // expect(application.program.csv).to.equal('lksjdfl')
+    //             expect(res.body).to.equal('titre,sujet')
+    //         }
+    //
+    //         return request(server)
+    //
+    //             .get('/debug/rawcsv')
+    //             .accept('text/html')
+    //             .expect(bodytoContainCsv)
+    //     })
+    // })
 })

@@ -10,12 +10,19 @@ class Application {
 
     buildRoutes() {
         let self = this
-        this.app.get('/summary', function (req, res, next) {
+        this.app.get('/summary', function (req, res) {
             res.send({
                 rooms: self.program.getRooms(),
                 slots: self.program.getSlots()
             })
         })
+        this.app.get('/debug/rawcsv', function (req, res) {
+            res.send(self.program.csv)
+        })
+        this.app.get('/debug/rawprogram', function (req, res) {
+            res.send(self.program.data)
+        })
+
         return this.app
     }
 
@@ -33,6 +40,7 @@ class Application {
 class Program {
     constructor(csv) {
         // TODO here
+        this.csv = csv
         this.data = this.todoCompileObjectFromCsv(csv)
     }
 
@@ -60,6 +68,8 @@ class Program {
     getSlots() {
         return this.data.slots
     }
+
+
 }
 
 module.exports = Application
