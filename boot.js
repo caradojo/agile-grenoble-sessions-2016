@@ -1,4 +1,4 @@
-
+"use strict";
 
 var Application = require('./src/Application')
 var downloadCsv = require('./src/DownloadCsv')
