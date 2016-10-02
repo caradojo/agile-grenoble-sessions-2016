@@ -6,7 +6,7 @@ var downloadCsv = require('./src/DownloadCsv')
 var application = new Application()
 let expressApp = application.buildRoutes()
 refreshCsv()
-expressApp.listen(3000)
+expressApp.listen(process.env.PORT || 3000)
 var twoMinutes = 120 * 1000
 setInterval(refreshCsv, twoMinutes)
 
