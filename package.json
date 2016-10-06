@@ -5,7 +5,8 @@
   "main": "boot.js",
   "scripts": {
     "start": "node boot.js",
-    "test": "mocha"
+    "test": "mocha",
+    "deploy": "node deploy.js"
   },
   "author": "",
   "license": "ISC",
