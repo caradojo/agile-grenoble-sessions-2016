@@ -10,20 +10,25 @@ class Application {
 
     buildRoutes() {
         let self = this
-        this.app.get('/summary', function (req, res) {
+        var app = this.app
+        app.get('/summary', function (req, res) {
             res.jsonp({
                 rooms: self.program.getRooms(),
                 slots: self.program.getSlots()
             })
         })
-        this.app.get('/debug/rawcsv', function (req, res) {
-            res.send(self.program.csv)
+        app.put('/program', (req, res) => {
+            self.updateWith(req.body)
+            res.send(self.program)
         })
-        this.app.get('/debug/rawprogram', function (req, res) {
+        app.get('/program', function (req, res) {
             res.send(self.program.data)
         })
+        app.get('/debug/rawcsv', function (req, res) {
+            res.send(self.program.csv)
+        })
 
-        return this.app
+        return app
     }
 
     updateWith(csv) {
@@ -57,7 +62,7 @@ class Program {
                     "type": "non-session"
                 }
             }],
-            sessions: [] // TODO array of all sessions where we can just get a session based on its index
+            sessionList: [] // TODO array of all sessions where we can just get a session based on its index
         }
     }
 

@@ -11,34 +11,38 @@ describe('given it has loaded the csv', function() {
         constructor() {
             var application = new Application()
             this.application = application
-            application.buildRoutes()
+            this.server = application.buildRoutes()
         }
 
         updateWith(csv) {
-            this.application.updateWith(csv)
-
+            return request(this.server)
+                .put('/program', csv)
+                .set('Content-Type', 'text/csv')
         }
 
         getSummary() {
+            return request(this.server).get('/summary')
+        }
 
-            let server = this.application.getRoutes()
-
-            return request(server).get('/summary')
-
+        getProgram() {
+            return request(this.server).get('/program')
         }
 
     }
 
-    describe('serves the roomlist', function() {
+    describe('/summary serves the roomlist', function() {
 
         it('where every room has a name and a sequential id', function() {
             let application = new TestApplication()
             let csv = "Titre,room;titre-session,Auditorium"
-            application.updateWith(csv)
-            return application.getSummary()
-                .set('Accept', 'application/json')
-                .expect(200)
-                .expect(bodyToHaveRoomsAndSlots)
+            return application.updateWith(csv)
+                .then(() => {
+                    return application.getSummary()
+                        .set('Accept', 'application/json')
+                        .expect(200)
+                        .expect(bodyToHaveRoomsAndSlots)
+
+                })
 
 
             function bodyToHaveRoomsAndSlots(res) {
@@ -56,13 +60,37 @@ describe('given it has loaded the csv', function() {
         })
 
     })
+    describe('/program serves both summary and all sessino details', function () {
+        it('', function() {
+            let application = new TestApplication()
+            let csv = "Titre,room;titre-session,Auditorium"
+            return application.updateWith(csv)
+                .then(() => {
+                    return application.getProgram()
+                        .set('Accept', 'application/json')
+                        .expect(200)
+                        .expect(bodyToHaveRoomsSlotsAndSessionList)
+                })
+
+
+            function bodyToHaveRoomsSlotsAndSessionList(res) {
+                var body = res.body
+                expect(body.rooms).not.to.be.undefined
+                expect(body.slots).not.to.be.undefined
+                expect(body.sessionList).not.to.be.undefined
+            }
+
+
+        })
+    })
     
     describe('with sessins', function() {
         it('', function() {
 
         })
     })
-    
+
+
     // describe('debugging', function() {
     //     it('has some raw csv', function() {
     //         var application = new Application()
