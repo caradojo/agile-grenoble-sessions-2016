@@ -5,7 +5,9 @@
   "main": "boot.js",
   "scripts": {
     "start": "node boot.js",
-    "test": "mocha",
+    "test": "mocha --recursive test/unit-test test/application-test/",
+    "adapter-test": "mocha --recursive test/adapter-test",
+    "all-test": "mocha --recursive test",
     "deploy": "node deploy.js"
   },
   "author": "",
