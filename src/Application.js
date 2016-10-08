@@ -17,10 +17,13 @@ class Application {
                 slots: self.program.getSummary()
             })
         })
-	app.get('/session', function(req, res) {
-	    var id = "2"; //ééé
-	    console.log(id + ': ' + self.program.getSession(id))
-	    res.jsonp(self.program.getSession(id))
+	app.get('/session/:id', function(req, res) {
+	    var id = req.param('id')
+	    if (id == undefined) {
+		res.respond(new Error('ID must be a valid integer'), 400);
+	    } else {
+		res.jsonp(self.program.getSession(id))
+	    }
 	})
 	// Update Csv program input
         app.put('/program', (req, res) => {
@@ -52,7 +55,6 @@ class Program {
     constructor(csv) {
         this.csv = csv
         this.compileObjectFromCsv(this.getRooms(), csv)
-	console.log(JSON.stringify(this.sessionDetails))
     }
 
     getSummary() {
@@ -60,7 +62,7 @@ class Program {
     }
 
     getSession(id) {
-	this.sessionDetails[id]
+	return this.sessionDetails[id]
     }
 
     getRooms() {
