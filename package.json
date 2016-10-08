@@ -15,10 +15,11 @@
     "mocha": "^3.1.0",
     "supertest": "^2.0.0",
     "supertest-as-promised": "^4.0.0",
-     "jquery-csv": "^0.2.0"
+    "jquery-csv": "^0.2.0"
   },
   "dependencies": {
     "express": "^4.14.0",
+    "jquery-csv": "^0.2.0",
     "request": "^2.75.0",
     "request-promise": "^4.1.1"
   }
