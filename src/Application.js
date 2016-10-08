@@ -152,13 +152,15 @@ class Program {
     moveSpeakersToArray(session) {
         session['speakers-detail'] = [];
         for (var speakerId=1; speakerId<=4; speakerId++) {
-            session['speakers-detail'][speakerId-1] = {};
-            for (var field of ['company', 'website', 'bio', 'name']) {
-                session['speakers-detail'][speakerId-1][field] = session[field+speakerId];
-                session[field+speakerId] = undefined;
-            }
-            session['speakers-detail'][speakerId-1]['name'] = session['firstname'+speakerId] + ' ' + session['speakers-detail'][speakerId-1]['name'];
-            session['firstname'+speakerId] = undefined;
+	    if (session['name'+speakerId].trim() != '' || session['firstname'+speakerId].trim() != '') {
+		session['speakers-detail'][speakerId-1] = {};
+		for (var field of ['company', 'website', 'bio', 'name']) {
+                    session['speakers-detail'][speakerId-1][field] = session[field+speakerId];
+                    session[field+speakerId] = undefined;
+		}
+		session['speakers-detail'][speakerId-1]['name'] = session['firstname'+speakerId] + ' ' + session['speakers-detail'][speakerId-1]['name'];
+		session['firstname'+speakerId] = undefined;
+	    }
         }
     }
 
@@ -168,11 +170,14 @@ class Program {
             sessionSummary[field] = session[field];
         }
 
+	sessionSummary.speakers = [];
 	var speakers = session['speakers-detail'];
-	if (session['speakers-detail'] != undefined) {
-	    session.speakers = [speakers[0].name, speakers[1].name, speakers[2].name];
+	if (speakers != undefined) {
+            for (var speakerId=0; speakerId<speakers.length; speakerId++) {
+		sessionSummary.speakers[speakerId] = speakers[speakerId].name;
+	    }
 	}
-	session['speakers-detail'] = undefined;
+	sessionSummary['speakers-detail'] = undefined;
 
         return sessionSummary;
     }
