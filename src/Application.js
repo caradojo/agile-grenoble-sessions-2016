@@ -1,6 +1,7 @@
 "use strict"
 var express = require('express')
-var jquerycsv = require('jquery-csv')
+var jquerycsv = require('jquery-csv') //var $ = jQuery = require('jQuery');
+
 
 class Application {
     constructor() {
@@ -12,6 +13,7 @@ class Application {
         let self = this
         var app = this.app
         app.get('/summary', function (req, res) {
+	    console.log('GET summary ' + new Date().toTimeString())
             res.jsonp({
                 rooms: self.program.getRooms(),
                 slots: self.program.getSummary()
@@ -25,13 +27,13 @@ class Application {
 		res.jsonp(self.program.getSession(id))
 	    }
 	})
-	// Update Csv program input
+	// Update input Csv program
         app.put('/program', (req, res) => {
             self.updateWith(req.body)
             res.send(self.program)
         })
         app.get('/program', function (req, res) {
-            res.send(self.program.data)
+            res.send(self.program.sessionDetails)
         })
         app.get('/debug/rawcsv', function (req, res) {
             res.send(self.program.csv)
@@ -53,7 +55,9 @@ class Application {
 
 class Program {
     constructor(csv) {
-        this.csv = csv
+        this.csv = csv;
+	this.sessionDetails = {}
+	this.programSummary = {}
         this.compileObjectFromCsv(this.getRooms(), csv)
     }
 
@@ -113,26 +117,27 @@ class Program {
 
     /** Filtre les sessions non retenues (=room pas défini)
 	Indique les sessions doubles (slot: '.+.') et les salles doubles (salle: 'xxx.+.').
-	Prend les noms de champs sur la 2ième ligne
+	Prend les noms de champs sur la 2ième ligne (voir boot.js:refreshCsv)
 
 	Pour le programme:
 	,id,status,,room,slot,,,title,theme,,,,,,firstname1,name1,,,,,,firstname2,name2,,,,,,firstname3,name3,,,,,,firstname4,name4,,,,,,,,
 	Pour les sessions:
 	,id,status,,room,slot,level,duration,title,theme,,,abstract,benefits,,firstname1,name1,,,company1,website1,bio1,firstname2,name2,,,company2,website2,bio2,firstname3,name3,,,company3,website3,bio3,firstname4,name4,,,company4,website4,bio4,,,
     */
-    compileObjectFromCsv(rooms, csvInput) {
-        csvInput = csvInput.slice(csvInput.indexOf('\n')+1);
-        var sessionsCsv = jquerycsv.toObjects(csvInput, this.csvError);
+    compileObjectFromCsv(rooms, csv) {
+        var sessionsCsv = /*$.csv*/ jquerycsv.toObjects(this.csv, this.csvError);
         var program = [];
         var sessionDetails = {};
-
+//console.log(); console.log(sessionsCsv.length + '   ' + this.csv.length);
         for (var s = 0; s<sessionsCsv.length; s++) {
 	    var session = sessionsCsv[s];
+//if (s<8) { console.log(session.id+ '-'+ session.room+ '-'+ session.title);};
 	    if (session.room != undefined && session.room != '') {
 	        session[''] = undefined;
                 this.moveSpeakersToArray(session);
                 sessionDetails[session.id] = session;
                 var sessionSummary = this.getSessionSummary(session);
+		//console.log(JSON.stringify(sessionSummary));
                 this.sessionToSlots(program, rooms, sessionSummary);
             }
         }
@@ -145,7 +150,7 @@ class Program {
         if (err) {
 	    console.log('*********** CSV ERROR: ' + err);
         } else {
-	    console.log('Convert CSV ok');
+	    console.log('Convert CSV ok??');
         }
     }
 
