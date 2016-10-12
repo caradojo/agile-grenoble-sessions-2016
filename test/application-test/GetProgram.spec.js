@@ -76,9 +76,9 @@ describe('given it has loaded the csv', function() {
 
             function bodyToHaveRoomsSlotsAndSessionList(res) {
                 var body = res.body
-                expect(body).to.have.property("rooms")
-                expect(body).to.have.property("slots")
-                expect(body).to.have.property("sessionList")
+                expect(body).to.have.property("sessionDetails")
+                expect(body).to.have.property("programSummary")
+                // expect(body).to.have.property("sessionList")
             }
 
 
@@ -90,5 +90,5 @@ describe('given it has loaded the csv', function() {
 
         })
     })
-    
+
 })

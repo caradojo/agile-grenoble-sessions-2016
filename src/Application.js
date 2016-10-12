@@ -35,7 +35,7 @@ class Application {
             res.send(self.program)
         })
         app.get('/program', function (req, res) {
-            res.send(self.program.sessionDetails)
+            res.send(self.program)
         })
         app.get('/debug/rawcsv', function (req, res) {
             res.send(self.program.csv)
