@@ -16,8 +16,9 @@ describe('given it has loaded the csv', function() {
 
         updateWith(csv) {
             return request(this.server)
-                .put('/program', csv)
+                .put('/program')
                 .set('Content-Type', 'text/csv')
+                .send(csv)
         }
 
         getSummary() {
@@ -48,7 +49,7 @@ describe('given it has loaded the csv', function() {
             function bodyToHaveRoomsAndSlots(res) {
                 var body = res.body
                 expect(body.rooms).not.to.be.undefined
-                expect(body.rooms).to.deep.equal({Auditorium: {capacity: 530, id:0}})
+                expect(body.rooms).to.have.property("Auditorium").to.deep.equal({capacity: 530, id:0})
                 expect(body.slots[0]).to.deep.equal({all: {
                     "width": 12,
                     "length": 1,
@@ -75,9 +76,9 @@ describe('given it has loaded the csv', function() {
 
             function bodyToHaveRoomsSlotsAndSessionList(res) {
                 var body = res.body
-                expect(body.rooms).not.to.be.undefined
-                expect(body.slots).not.to.be.undefined
-                expect(body.sessionList).not.to.be.undefined
+                expect(body).to.have.property("rooms")
+                expect(body).to.have.property("slots")
+                expect(body).to.have.property("sessionList")
             }
 
 
@@ -89,24 +90,5 @@ describe('given it has loaded the csv', function() {
 
         })
     })
-
-
-    // describe('debugging', function() {
-    //     it('has some raw csv', function() {
-    //         var application = new Application()
-    //         application.updateWith("titre,sujet")
-    //         let server = application.buildRoutes()
-    //
-    //         function bodytoContainCsv(res) {
-    //             // expect(application.program.csv).to.equal('lksjdfl')
-    //             expect(res.body).to.equal('titre,sujet')
-    //         }
-    //
-    //         return request(server)
-    //
-    //             .get('/debug/rawcsv')
-    //             .accept('text/html')
-    //             .expect(bodytoContainCsv)
-    //     })
-    // })
+    
 })

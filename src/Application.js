@@ -1,5 +1,6 @@
 "use strict"
 var express = require('express')
+var bodyParser = require('body-parser')
 var jquerycsv = require('jquery-csv') //var $ = jQuery = require('jQuery');
 
 
@@ -12,6 +13,7 @@ class Application {
     buildRoutes() {
         let self = this
         var app = this.app
+        app.use(bodyParser.text({type: '*/*'}))
         app.get('/summary', function (req, res) {
 	    console.log('GET summary ' + new Date().toTimeString())
             res.jsonp({
