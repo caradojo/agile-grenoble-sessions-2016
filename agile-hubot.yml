@@ -1,4 +1,4 @@
 deploy:
   heroku:
-    master: (default branch - required)
+    master:
       appname: agile-grenoble-2016
